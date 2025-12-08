@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "OctoPrint-Wrapped"
+version = "0.1.0"
+description = "Get your yearly stats!"
+authors = [
+    {name = "Gina Häußge", email = "gina@octoprint.org"}
+]
+readme = {file = "README.md", content-type = "text/markdown"}
+dynamic = [
+    "license"
+]
+
+requires-python = ">=3.7, <4"
+
+# any additional requirements (besides OctoPrint) should be listed here
+dependencies = []
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = [
+    "octoprint_wrapped",
+    "octoprint_wrapped.*"
+]
+
+[project.entry-points."octoprint.plugin"]
+wrapped = "octoprint_wrapped"
+
+[project.urls]
+Homepage = "https://github.com/OctoPrint/OctoPrint-Wrapped"
+
+[project.optional-dependencies]
+develop = [
+    "go-task-bin"
+]
