@@ -2,7 +2,7 @@
 
 Get your yearly OctoPrint stats a shareable "wrapped" picture - and let it snow! ❄️
 
-![Demo OctoPrint Wrapped share picture](https://raw.githubusercontent.com/OctoPrint/OctoPrint-Wrapped/main/extras/wrapped-demo.png)
+<img src="https://raw.githubusercontent.com/OctoPrint/OctoPrint-Wrapped/main/extras/wrapped-demo.png" width="400" height="400" alt="Demo OctoPrint Wrapped share picture" />
 
 ![Demo of snow effect](https://raw.githubusercontent.com/OctoPrint/OctoPrint-Wrapped/main/extras/snowfall-demo.gif)
 
