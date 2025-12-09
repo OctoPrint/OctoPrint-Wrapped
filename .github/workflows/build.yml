@@ -6,16 +6,23 @@ on:
     types: [released]
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.event_name }}
+  cancel-in-progress: true
+
+env:
+  DEFAULT_PYTHON: "3.12"
+
 jobs:
   build:
     name: 🔨 Build distribution
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: 🏗 Set up Python 3.10
+      - name: 🏗 Set up Python ${{ env.DEFAULT_PYTHON }}
         uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
+          python-version: "${{ env.DEFAULT_PYTHON }}"
       - name: 🔨 Build distribution
         uses: OctoPrint/actions/build-dist@main
         with:
@@ -26,10 +33,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: 🏗 Set up Python 3.10
+      - name: 🏗 Set up Python ${{ env.DEFAULT_PYTHON }}
         uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
+          python-version: "${{ env.DEFAULT_PYTHON }}"
       - name: 🏗 Set up pre-commit
         run: |
           pip install pre-commit
