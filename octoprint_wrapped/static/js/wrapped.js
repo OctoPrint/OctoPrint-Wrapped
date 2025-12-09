@@ -107,7 +107,7 @@ $(function () {
             const head = document.getElementsByTagName("head")[0];
 
             if (!self.snowfallEnabled) {
-                if (showSnow !== undefined) showSnow(false);
+                if (typeof showSnow !== "undefined") showSnow(false);
             } else if (self.snowfallEnabled) {
                 if (!self.withinWrappedSeason()) return;
 
@@ -131,13 +131,18 @@ $(function () {
                     scriptSnow.defer = true;
                     scriptSnow.onload = () => {
                         setTimeout(() => {
+                            if (
+                                typeof createSnow === "undefined" ||
+                                typeof showSnow === "undefined"
+                            )
+                                return;
                             createSnow();
-                            if (showSnow !== undefined) showSnow(true);
+                            showSnow(true);
                         }, 500);
                     };
                     head.appendChild(scriptSnow);
                 } else {
-                    if (showSnow !== undefined) showSnow(true);
+                    if (typeof showSnow !== "undefined") showSnow(true);
                 }
             }
         };
