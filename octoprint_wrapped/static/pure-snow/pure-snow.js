@@ -13,8 +13,8 @@ let bodyHeightPx = null;
 let pageHeightVh = null;
 
 function setHeightVariables() {
-    bodyHeightPx = Math.min(document.body.offsetHeight, window.innerHeight);
-    pageHeightVh = (100 * bodyHeightPx) / window.innerHeight;
+    bodyHeightPx = document.body.offsetHeight;
+    pageHeightVh = Math.max((100 * bodyHeightPx) / window.innerHeight, 100.0);
 }
 
 // get params set in snow div
