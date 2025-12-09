@@ -4,7 +4,7 @@ Get your yearly OctoPrint stats a shareable "wrapped" picture - and let it snow!
 
 ![Demo OctoPrint Wrapped share picture](https://raw.githubusercontent.com/OctoPrint/OctoPrint-Wrapped/main/extras/wrapped-demo.png)
 
-<video src="https://raw.githubusercontent.com/OctoPrint/OctoPrint-Wrapped/main/extras/snowfall-demo.mp4"></video>
+![Demo of snow effect](https://raw.githubusercontent.com/OctoPrint/OctoPrint-Wrapped/main/extras/snowfall-demo.gif)
 
 The stats picture depends on the Achievements plugin being enabled (as it takes care of
 the stats collection during the year) and can be opened via the little gift package icon
