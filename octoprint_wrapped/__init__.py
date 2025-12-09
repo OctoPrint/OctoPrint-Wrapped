@@ -5,6 +5,7 @@ from typing import Optional
 import flask
 import octoprint.plugin
 from flask_babel import gettext
+from octoprint.access.permissions import Permissions
 from octoprint.schema import BaseModel
 
 WEEKDAYS = [
@@ -31,20 +32,22 @@ class YearStats(BaseModel):
     octoprint_versions: int
 
 
+class ApiResponse(BaseModel):
+    years: list[int]
+
+
 class WrappedPlugin(
     octoprint.plugin.AssetPlugin,
     octoprint.plugin.BlueprintPlugin,
+    octoprint.plugin.SimpleApiPlugin,
     octoprint.plugin.TemplatePlugin,
 ):
     ##~~ AssetPlugin mixin
 
     def get_assets(self):
-        # Define your plugin's asset files to automatically include in the
-        # core UI here.
         return {
-            "js": ["js/wrapped.js"],
-            "css": ["css/wrapped.css"],
-            "less": ["less/wrapped.less"],
+            "clientjs": ["clientjs/wrapped.js"],
+            "js": ["js/wrapped.js", "js/ko.src.svgtopng.js"],
         }
 
     ##~~ BlueprintPlugin mixin
@@ -57,6 +60,12 @@ class WrappedPlugin(
 
     @octoprint.plugin.BlueprintPlugin.route("/<int:year>.svg", methods=["GET"])
     def get_svg(self, year):
+        if (
+            not hasattr(Permissions, "PLUGIN_ACHIEVEMENTS_VIEW")
+            or not Permissions.PLUGIN_ACHIEVEMENTS_VIEW.can()
+        ):
+            flask.abort(403)
+
         stats = self._get_year_stats(year)
         if stats is None:
             flask.abort(404)
@@ -69,12 +78,27 @@ class WrappedPlugin(
         response.headers["Content-Type"] = "image/svg+xml"
         return response
 
+    ##~~ SimpleApiPlugin mixin
+
+    def is_api_protected(self):
+        return True
+
+    def on_api_get(self, request):
+        if (
+            not hasattr(Permissions, "PLUGIN_ACHIEVEMENTS_VIEW")
+            or not Permissions.PLUGIN_ACHIEVEMENTS_VIEW.can()
+        ):
+            flask.abort(403)
+
+        response = ApiResponse(years=self._get_available_years())
+        return flask.jsonify(response.model_dump(by_alias=True))
+
     ##~~ Softwareupdate hook
 
     def get_update_information(self):
         return {
             "wrapped": {
-                "displayName": "Wrapped Plugin",
+                "displayName": "OctoPrint Wrapped!",
                 "displayVersion": self._plugin_version,
                 # version check: github repository
                 "type": "github_release",
@@ -99,19 +123,60 @@ class WrappedPlugin(
                 "template": "wrapped_about.jinja2",
                 "custom_bindings": True,
             },
+            {
+                "type": "navbar",
+                "template": "wrapped_navbar_wrapped.jinja2",
+                "custom_bindings": True,
+            },
+            {
+                "type": "navbar",
+                "template": "wrapped_navbar_snowfall.jinja2",
+                "custom_bindings": True,
+            },
         ]
 
     ##~~ helpers
 
-    def _get_year_stats(self, year: int) -> Optional[YearStats]:
-        achievements_data_folder = os.path.join(
-            self.get_plugin_data_folder(), "..", "achievements"
-        )
-        if not os.path.exists(achievements_data_folder):
+    def _get_year_stats_folder(self) -> Optional[str]:
+        folder = os.path.join(self.get_plugin_data_folder(), "..", "achievements")
+        if not os.path.isdir(folder):
+            return None
+        return folder
+
+    def _get_year_stats_file(self, year: int) -> Optional[str]:
+        folder = self._get_year_stats_folder()
+        if not folder:
             return None
 
-        stats_file = os.path.join(achievements_data_folder, f"{year}.json")
-        if not os.path.exists(stats_file):
+        year_path = os.path.join(folder, f"{year}.json")
+        if not os.path.isfile(year_path):
+            return None
+
+        return year_path
+
+    def _get_available_years(self) -> list[int]:
+        import re
+
+        stats_folder = self._get_year_stats_folder()
+        if not stats_folder:
+            return []
+
+        pattern = re.compile("\d{4}.json")
+
+        years = []
+        for entry in os.scandir(stats_folder):
+            if not entry.is_file():
+                continue
+
+            if pattern.fullmatch(entry.name):
+                year, _ = os.path.splitext(entry.name)
+                years.append(int(year))
+
+        return years
+
+    def _get_year_stats(self, year: int) -> Optional[YearStats]:
+        stats_file = self._get_year_stats_file(year)
+        if not stats_file:
             return None
 
         try:
@@ -164,9 +229,6 @@ class WrappedPlugin(
         minutes = int(seconds / SECONDS_MINUTE)
         seconds -= minutes * SECONDS_MINUTE
 
-        if seconds >= 30:
-            minutes += 1
-
         return f"{days}d {hours}h {minutes}m"
 
     def _to_duration_hours(self, seconds: int) -> str:
@@ -176,14 +238,11 @@ class WrappedPlugin(
         minutes = int(seconds / SECONDS_MINUTE)
         seconds -= minutes * SECONDS_MINUTE
 
-        if seconds >= 30:
-            minutes += 1
-
         return f"{hours}h {minutes}m"
 
 
 __plugin_name__ = "OctoPrint Wrapped!"
-__plugin_pythoncompat__ = ">=3.7,<4"  # Only Python 3
+__plugin_pythoncompat__ = ">=3.9,<4"  # Only Python 3
 
 
 def __plugin_load__():
@@ -192,5 +251,5 @@ def __plugin_load__():
 
     global __plugin_hooks__
     __plugin_hooks__ = {
-        "octoprint.plugin.softwareupdate.check_config": __plugin_implementation__.get_update_information
+        "octoprint.plugin.softwareupdate.check_config": __plugin_implementation__.get_update_information,
     }

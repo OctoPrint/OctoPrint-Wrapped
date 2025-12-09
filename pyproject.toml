@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "OctoPrint-Wrapped"
 version = "0.1.0"
-description = "Get your yearly stats!"
+description = "Get your yearly OctoPrint stats and let it snow! Depends on the Achievements plugin."
 authors = [
     {name = "Gina Häußge", email = "gina@octoprint.org"}
 ]
@@ -14,7 +14,7 @@ dynamic = [
     "license"
 ]
 
-requires-python = ">=3.7, <4"
+requires-python = ">=3.9, <4"
 
 # any additional requirements (besides OctoPrint) should be listed here
 dependencies = []
