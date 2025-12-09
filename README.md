@@ -2,9 +2,16 @@
 
 Get your yearly OctoPrint stats a shareable "wrapped" picture - and let it snow! ❄️
 
+![Demo OctoPrint Wrapped share picture](https://raw.githubusercontent.com/OctoPrint/OctoPrint-FirmwareCheck/master/extras/wrapped-demo.png)
+
+<video src="https://raw.githubusercontent.com/OctoPrint/OctoPrint-FirmwareCheck/master/extras/snowfall-demo.mp4"></video>
+
 The stats picture depends on the Achievements plugin being enabled (as it takes care of
-the stats collection during the year). The snow effect can always be toggled during
-the season and its setting persists through the browser's local storage.
+the stats collection during the year) and can be opened via the little gift package icon
+in the navbar.
+
+The snow effect can always be toggled during the season using the little snowflake icon
+in the navbar, and its setting persists through the browser's local storage.
 
 Both wrapped and snowfall are only available from December 1st until January 10th.
 
