@@ -3,9 +3,8 @@
 version: "3"
 
 env:
-  LOCALES: []  # list your included locales here, e.g. ["de", "fr"]
-  TRANSLATIONS: octoprint_wrapped/translations  # translations folder, do not touch
-
+  LOCALES: [] # list your included locales here, e.g. ["de", "fr"]
+  TRANSLATIONS: octoprint_wrapped/translations # translations folder, do not touch
 
 tasks:
   install:
@@ -78,4 +77,3 @@ tasks:
 
           echo "Copying translations for locale ${locale} from ${source} to ${target}..."
           cp -r "${source}" "${target}"
-

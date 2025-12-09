@@ -13,7 +13,7 @@ $(function () {
     const SNOWFALL_LOCAL_STORAGE_KEY = "plugin.wrapped.snowfall";
     const snowfallToLocalStorage = (value) => {
         saveToLocalStorage(SNOWFALL_LOCAL_STORAGE_KEY, {
-            enabled: value,
+            enabled: value
         });
     };
 
@@ -117,15 +117,13 @@ $(function () {
 
                     const styleSnow = document.createElement("link");
                     styleSnow.href =
-                        BASEURL +
-                        "plugin/wrapped/static/pure-snow/pure-snow.css";
+                        BASEURL + "plugin/wrapped/static/pure-snow/pure-snow.css";
                     styleSnow.rel = "stylesheet";
                     head.appendChild(styleSnow);
 
                     const scriptSnow = document.createElement("script");
                     scriptSnow.src =
-                        BASEURL +
-                        "plugin/wrapped/static/pure-snow/pure-snow.js";
+                        BASEURL + "plugin/wrapped/static/pure-snow/pure-snow.js";
                     scriptSnow.defer = true;
                     scriptSnow.onload = () => {
                         setTimeout(() => {
@@ -161,15 +159,11 @@ $(function () {
 
     OCTOPRINT_VIEWMODELS.push({
         construct: WrappedViewModel,
-        dependencies: [
-            "loginStateViewModel",
-            "accessViewModel",
-            "aboutViewModel",
-        ],
+        dependencies: ["loginStateViewModel", "accessViewModel", "aboutViewModel"],
         elements: [
             "#about_plugin_wrapped",
             "#navbar_plugin_wrapped",
-            "#navbar_plugin_wrapped_2",
-        ],
+            "#navbar_plugin_wrapped_2"
+        ]
     });
 });

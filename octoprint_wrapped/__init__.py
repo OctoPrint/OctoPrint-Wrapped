@@ -71,9 +71,7 @@ class WrappedPlugin(
             flask.abort(404)
 
         response = flask.make_response(
-            flask.render_template(
-                "wrapped.svg.jinja2", **stats.model_dump(by_alias=True)
-            )
+            flask.render_template("wrapped.svg.jinja2", **stats.model_dump(by_alias=True))
         )
         response.headers["Content-Type"] = "image/svg+xml"
         return response
@@ -161,7 +159,7 @@ class WrappedPlugin(
         if not stats_folder:
             return []
 
-        pattern = re.compile("\d{4}.json")
+        pattern = re.compile(r"\d{4}.json")
 
         years = []
         for entry in os.scandir(stats_folder):
@@ -180,7 +178,7 @@ class WrappedPlugin(
             return None
 
         try:
-            with open(stats_file, "r") as f:
+            with open(stats_file) as f:
                 stats = json.load(f)
         except Exception:
             self._logger.exception(

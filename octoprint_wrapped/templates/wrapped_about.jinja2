@@ -2,16 +2,23 @@
 
 <div data-bind="visible: withinWrappedSeason">
     <div data-bind="visible: currentWrappedAvailable">
-        <img data-bind="src.svgtopng: currentSvgUrl()" width=400 height=400 />
+        <img data-bind="src.svgtopng: currentSvgUrl()"
+             alt="OctoPrint Wrapped sharepic"
+             width="400"
+             height="400" />
     </div>
 
-    <p data-bind="visible: !currentWrappedAvailable()">{% trans %}
-        Sadly, there are no stats available to generate your current OctoPrint Wrapped for you. 
+    <p data-bind="visible: !currentWrappedAvailable()">
+        {% trans %}
+        Sadly, there are no stats available to generate your current OctoPrint Wrapped for you.
         OctoPrint Wrapped depends on the stats collection done by the Achievements plugin,
         so if you disabled that, that would explain it. Make sure to enable the Achievements
         plugin if you want to get your OctoPrint Wrapped next time!
-    {% endtrans %}</p>
+    {% endtrans %}
+</p>
 </div>
-<p data-bind="visible: !withinWrappedSeason()">{% trans %}
+<p data-bind="visible: !withinWrappedSeason()">
+    {% trans %}
     Nothing to see here at the moment! Come back between December 1st and January 10th!
-{% endtrans %}</p>
+{% endtrans %}
+</p>

@@ -1,4 +1,4 @@
-# OctoPrint-Wrapped 🎁
+# OctoPrint Wrapped! 🎁
 
 Get your yearly OctoPrint stats a shareable "wrapped" picture - and let it snow! ❄️
 

@@ -126,7 +126,7 @@ window.addEventListener("resize", createSnow);
 if (typeof module !== "undefined") {
     module.exports = {
         createSnow,
-        showSnow,
+        showSnow
     };
 } else {
     window.onload = createSnow;

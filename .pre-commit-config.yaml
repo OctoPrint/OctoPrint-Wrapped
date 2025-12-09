@@ -1,0 +1,55 @@
+default_language_version:
+  python: python3.12
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-case-conflict
+      - id: check-json
+      - id: check-yaml
+      - id: check-toml
+      - id: check-merge-conflict
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.20.0
+    hooks:
+      - id: pyupgrade
+        args: ["--py39-plus"]
+        exclude: "setup.py|src/octoprint_setuptools/__init__.py"
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.12.0
+    hooks:
+      - id: ruff-check
+        args: ["--fix"]
+      - id: ruff-format
+  - repo: https://github.com/djlint/djlint
+    rev: v1.36.4
+    hooks:
+      - id: djlint
+        files: "\\.html$"
+        types: [html]
+      - id: djlint-reformat
+        files: "\\.html$"
+        types: [html]
+      - id: djlint-jinja
+        exclude: ^(octoprint_wrapped/templates/wrapped.svg.jinja2)
+      - id: djlint-reformat-jinja
+        exclude: ^(octoprint_wrapped/templates/wrapped.svg.jinja2)
+  - repo: https://github.com/rbubley/mirrors-prettier
+    rev: v3.6.0
+    hooks:
+      - id: prettier
+        files: "\\.(js|json|css|less|md|yml|yaml)$"
+  - repo: https://github.com/pre-commit/mirrors-eslint
+    rev: v9.29.0
+    hooks:
+      - id: eslint
+        files: \.js$
+        exclude: ^(octoprint_wrapped/static/pure-snow/)
+        additional_dependencies: ["eslint@9.29.0", "globals@16.2.0"]
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.4.1
+    hooks:
+      - id: codespell
+        exclude: ^(octoprint_wrapped/static/pure-snow/)

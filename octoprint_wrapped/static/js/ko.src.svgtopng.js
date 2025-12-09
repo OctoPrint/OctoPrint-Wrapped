@@ -1,11 +1,5 @@
 ko.bindingHandlers["src.svgtopng"] = {
-    init: (
-        element,
-        valueAccessor,
-        allBindingsAccessor,
-        viewModel,
-        bindingContext
-    ) => {
+    init: (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) => {
         const value = valueAccessor();
         const valueUnwrapped = ko.unwrap(value);
         if (!valueUnwrapped) return;
@@ -16,7 +10,7 @@ ko.bindingHandlers["src.svgtopng"] = {
             const svgString = xhr.responseText;
 
             const svg = new Blob([svgString], {
-                type: "image/svg+xml;charset=utf-8",
+                type: "image/svg+xml;charset=utf-8"
             });
 
             const url = URL.createObjectURL(svg);
@@ -37,7 +31,6 @@ ko.bindingHandlers["src.svgtopng"] = {
             };
             img.src = url;
         });
-    },
+    }
 };
-ko.bindingHandlers["src.svgtopng"].update =
-    ko.bindingHandlers["src.svgtopng"].init;
+ko.bindingHandlers["src.svgtopng"].update = ko.bindingHandlers["src.svgtopng"].init;
