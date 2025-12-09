@@ -2,9 +2,9 @@
 
 Get your yearly OctoPrint stats a shareable "wrapped" picture - and let it snow! ❄️
 
-![Demo OctoPrint Wrapped share picture](https://raw.githubusercontent.com/OctoPrint/OctoPrint-FirmwareCheck/master/extras/wrapped-demo.png)
+![Demo OctoPrint Wrapped share picture](https://raw.githubusercontent.com/OctoPrint/OctoPrint-Wrapped/master/extras/wrapped-demo.png)
 
-<video src="https://raw.githubusercontent.com/OctoPrint/OctoPrint-FirmwareCheck/master/extras/snowfall-demo.mp4"></video>
+<video src="https://raw.githubusercontent.com/OctoPrint/OctoPrint-Wrapped/master/extras/snowfall-demo.mp4"></video>
 
 The stats picture depends on the Achievements plugin being enabled (as it takes care of
 the stats collection during the year) and can be opened via the little gift package icon
