@@ -1,6 +1,12 @@
-# OctoPrint-Wrapped
+# OctoPrint-Wrapped 🎁
 
-**TODO:** Describe what your plugin does.
+Get your yearly OctoPrint stats a shareable "wrapped" picture - and let it snow! ❄️
+
+The stats picture depends on the Achievements plugin being enabled (as it takes care of
+the stats collection during the year). The snow effect can always be toggled during
+the season and its setting persists through the browser's local storage.
+
+Both wrapped and snowfall are only available from December 1st until January 10th.
 
 ## Setup
 
@@ -9,9 +15,6 @@ or manually using this URL:
 
     https://github.com/OctoPrint/OctoPrint-Wrapped/archive/main.zip
 
-**TODO:** Describe how to install your plugin, if more needs to be done than just installing it via pip or through
-the plugin manager.
-
 ## Configuration
 
-**TODO:** Describe your plugin's configuration options (if any).
+The plugin does not have any configuration options.
