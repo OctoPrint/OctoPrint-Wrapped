@@ -1,0 +1,132 @@
+name: Build pipeline
+on:
+  push:
+  pull_request:
+  release:
+    types: [released]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: 🔨 Build distribution
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 🏗 Set up Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - name: 🔨 Build distribution
+        uses: OctoPrint/actions/build-dist@main
+        with:
+          artifact: dist
+
+  pre-commit:
+    name: 🧹 Pre-commit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 🏗 Set up Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - name: 🏗 Set up pre-commit
+        run: |
+          pip install pre-commit
+      - name: 🚀 Run pre-commit
+        run: |
+          pre-commit run --all-files --show-diff-on-failure
+
+  test-install:
+    name: 🧪 Installation test
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 🏗 Set up Python ${{ matrix.python }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: 🚀 Set up test dependencies & run test install
+        run: |
+          pip install octoprint
+          pip install -e .[develop]
+
+  test-e2e:
+    name: 🧪 E2E tests
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        octoprint: ["main", "dev"]
+        python: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+    steps:
+      - name: ⬇ Download build result
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+      - name: 🎭 Run OctoPrint's E2E Tests
+        uses: OctoPrint/actions/e2e@main
+        with:
+          ref: ${{ matrix.octoprint }}
+          python: ${{ matrix.python }}
+          deps: ${{ github.workspace }}/dist/*.whl
+          suffix: "-${{ matrix.octoprint }}-py${{ matrix.python }}"
+
+  publish-on-testpypi:
+    name: 📦 Publish on TestPyPI
+    if: github.event_name == 'release'
+    needs:
+      - build
+      - pre-commit
+      - test-install
+      - test-e2e
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/OctoPrint-Wrapped
+    steps:
+      - name: ⬇ Download build result
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+      - name: 🧹 Remove some stuff that won't make it through twine check
+        run: |
+          rm dist/*.source.tar.gz
+          rm dist/sha512sums.txt
+      - name: 📦 Publish to index
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+
+  publish-on-pypi:
+    name: 📦 Publish tagged releases to PyPI
+    if: github.event_name == 'release'
+    needs: publish-on-testpypi
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    environment:
+      name: pypi
+      url: https://pypi.org/p/OctoPrint-Wrapped
+    steps:
+      - name: ⬇ Download build result
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+      - name: 🧹 Remove some stuff that won't make it through twine check
+        run: |
+          rm dist/*.source.tar.gz
+          rm dist/sha512sums.txt
+      - name: 📦 Publish to index
+        uses: pypa/gh-action-pypi-publish@release/v1
