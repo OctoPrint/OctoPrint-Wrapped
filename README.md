@@ -18,3 +18,8 @@ or manually using this URL:
 ## Configuration
 
 The plugin does not have any configuration options.
+
+## Acknowledgements
+
+The snowfall is implemented with a slightly customized version of [pure-snow.js](https://github.com/hyperstown/pure-snow.js),
+released under the MIT license and bundled here under `octoprint_wrapped/static/pure-snow`.
