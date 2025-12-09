@@ -227,7 +227,11 @@ class WrappedPlugin(
         minutes = int(seconds / SECONDS_MINUTE)
         seconds -= minutes * SECONDS_MINUTE
 
-        return f"{days}d {hours}h {minutes}m"
+        if days >= 100:
+            # strip the minutes to keep things fitting...
+            return f"{days}d {hours}h"
+        else:
+            return f"{days}d {hours}h {minutes}m"
 
     def _to_duration_hours(self, seconds: int) -> str:
         hours = int(seconds / SECONDS_HOUR)
