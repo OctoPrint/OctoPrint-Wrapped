@@ -17,7 +17,7 @@ If you want to bundle translations with your plugin, create a new folder
 an additional command becomes available:
 
 go-task babel-bundle
-    Moves the translations for the locales defined in Taskfile.yml to 
+    Moves the translations for the locales defined in Taskfile.yml to
     octoprint_wrapped/translations,
     effectively bundling them with your plugin. This is interesting for languages
     you can guarantee to keep up to date yourself with each new release of your
