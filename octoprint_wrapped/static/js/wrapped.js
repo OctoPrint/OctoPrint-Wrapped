@@ -99,7 +99,7 @@ $(function () {
         };
 
         self.updateSnowfall = () => {
-            let container = document.getElementById("#snow");
+            let container = document.getElementById("snow");
 
             const body = document.getElementsByTagName("body")[0];
             const head = document.getElementsByTagName("head")[0];
