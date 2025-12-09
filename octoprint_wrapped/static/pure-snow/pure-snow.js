@@ -13,7 +13,7 @@ let bodyHeightPx = null;
 let pageHeightVh = null;
 
 function setHeightVariables() {
-    bodyHeightPx = min(document.body.offsetHeight, window.innerHeight);
+    bodyHeightPx = Math.min(document.body.offsetHeight, window.innerHeight);
     pageHeightVh = (100 * bodyHeightPx) / window.innerHeight;
 }
 
