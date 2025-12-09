@@ -1,9 +1,17 @@
 let snowflakesCount = 200; // Snowflake count, can be overwritten by attrs
+let minDuration = 10; // can be overwritten by attrs
+let maxDuration = 30; // can be overwritten by attrs
 let baseCSS = ``;
 
 // set global attributes
 if (typeof SNOWFLAKES_COUNT !== "undefined") {
     snowflakesCount = SNOWFLAKES_COUNT;
+}
+if (typeof SNOWFLAKES_MIN_DURATION !== "undefined") {
+    minDuration = SNOWFLAKES_MIN_DURATION;
+}
+if (typeof SNOWFLAKES_MAX_DURATION !== "undefined") {
+    maxDuration = SNOWFLAKES_MAX_DURATION;
 }
 if (typeof BASE_CSS !== "undefined") {
     baseCSS = BASE_CSS;
@@ -21,6 +29,8 @@ function setHeightVariables() {
 function getSnowAttributes() {
     const snowWrapper = document.getElementById("snow");
     snowflakesCount = Number(snowWrapper?.dataset?.count || snowflakesCount);
+    minDuration = Number(snowWrapper?.dataset?.durmin || minDuration);
+    maxDuration = Number(snowWrapper?.dataset?.durmax || maxDuration);
 }
 
 // This function allows you to turn on and off the snow
@@ -89,7 +99,10 @@ function generateSnowCSS(snowDensity = 200) {
         let randomYoyoTime = getRandomArbitrary(0.3, 0.8);
         let randomYoyoY = randomYoyoTime * pageHeightVh; // vh
         let randomScale = Math.random();
-        let fallDuration = randomIntRange(10, (pageHeightVh / 10) * 3); // s
+        let fallDuration = Math.min(
+            randomIntRange(minDuration, (pageHeightVh / 10) * 3),
+            maxDuration
+        ); // s
         let fallDelay = randomInt((pageHeightVh / 10) * 3) * -1; // s
         let opacity = Math.random();
 

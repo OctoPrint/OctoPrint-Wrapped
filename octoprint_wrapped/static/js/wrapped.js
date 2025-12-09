@@ -6,6 +6,8 @@
  */
 $(function () {
     const FLAKES = 50;
+    const MIN_DURATION = 5;
+    const MAX_DURATION = 15;
 
     const MONTH_DECEMBER = 11;
     const MONTH_JANUARY = 0;
@@ -113,6 +115,8 @@ $(function () {
                     container = document.createElement("div");
                     container.id = "snow";
                     container.dataset.count = FLAKES;
+                    container.dataset.durmin = MIN_DURATION;
+                    container.dataset.durmax = MAX_DURATION;
                     body.insertBefore(container, body.firstChild);
 
                     const styleSnow = document.createElement("link");
@@ -128,7 +132,7 @@ $(function () {
                     scriptSnow.onload = () => {
                         setTimeout(() => {
                             createSnow();
-                            showSnow(true);
+                            if (showSnow !== undefined) showSnow(true);
                         }, 500);
                     };
                     head.appendChild(scriptSnow);
