@@ -36,7 +36,8 @@ Homepage = "https://github.com/OctoPrint/OctoPrint-Wrapped"
 
 [project.optional-dependencies]
 develop = [
-    "go-task-bin"
+    "go-task-bin",
+    "pytest"
 ]
 
 [tool.ruff]

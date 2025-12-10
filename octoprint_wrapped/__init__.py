@@ -215,10 +215,10 @@ class WrappedPlugin(
             return YearStats(
                 year=year,
                 prints_completed=stats.get("prints_finished", 0),
-                total_print_duration=self._to_duration_days(
+                total_print_duration=_format_duration(
                     int(stats.get("print_duration_total", 0))
                 ),
-                longest_print=self._to_duration_hours(
+                longest_print=_format_duration(
                     int(stats.get("longest_print_duration", 0))
                 ),
                 busiest_weekday=weekday,
@@ -230,31 +230,6 @@ class WrappedPlugin(
                 f"Error while parsing yearly stats for {year} from {stats_file}"
             )
             return None
-
-    def _to_duration_days(self, seconds: int) -> str:
-        days = int(seconds / SECONDS_DAY)
-        seconds -= days * SECONDS_DAY
-
-        hours = int(seconds / SECONDS_HOUR)
-        seconds -= hours * SECONDS_HOUR
-
-        minutes = int(seconds / SECONDS_MINUTE)
-        seconds -= minutes * SECONDS_MINUTE
-
-        if days >= 100:
-            # strip the minutes to keep things fitting...
-            return f"{days}d {hours}h"
-        else:
-            return f"{days}d {hours}h {minutes}m"
-
-    def _to_duration_hours(self, seconds: int) -> str:
-        hours = int(seconds / SECONDS_HOUR)
-        seconds -= hours * SECONDS_HOUR
-
-        minutes = int(seconds / SECONDS_MINUTE)
-        seconds -= minutes * SECONDS_MINUTE
-
-        return f"{hours}h {minutes}m"
 
     def _load_font(self) -> None:
         from base64 import b64encode
@@ -271,6 +246,54 @@ class WrappedPlugin(
             self.font_open_sans_bold = f"data:font/woff;base64,{encoded}"
         except Exception:
             self._logger.exception("Error creating data URI for embedded font")
+
+
+def _format_duration(seconds: int) -> str:
+    """
+    Formats a duration in seconds for the wrapped picture.
+
+    Examples:
+
+    >>> _format_duration(SECONDS_MINUTE)
+    '0h 1m'
+    >>> _format_duration(SECONDS_HOUR)
+    '1h 0m'
+    >>> _format_duration(SECONDS_DAY)
+    '1d 0h 0m'
+    >>> _format_duration(SECONDS_DAY + SECONDS_HOUR + SECONDS_MINUTE)
+    '1d 1h 1m'
+    >>> _format_duration(99 * SECONDS_DAY + SECONDS_HOUR + SECONDS_MINUTE)
+    '99d 1h 1m'
+    >>> _format_duration(100 * SECONDS_DAY + SECONDS_HOUR + SECONDS_MINUTE)
+    '100d 1h'
+    >>> _format_duration(100 * SECONDS_DAY + SECONDS_HOUR + 30 * SECONDS_MINUTE)
+    '100d 2h'
+    >>> _format_duration(100 * SECONDS_DAY + 23 * SECONDS_HOUR + 30 * SECONDS_MINUTE)
+    '101d 0h'
+    """
+    days = int(seconds / SECONDS_DAY)
+    seconds %= SECONDS_DAY
+
+    hours = int(seconds / SECONDS_HOUR)
+    seconds %= SECONDS_HOUR
+
+    minutes = int(seconds / SECONDS_MINUTE)
+    seconds %= SECONDS_MINUTE
+
+    if days >= 100:
+        # strip the minutes to keep things fitting (but round up if needed)...
+        if minutes >= 30:
+            # past 30m -> add an hour
+            hours += 1
+        if hours >= 24:
+            # past 24h -> add a day
+            hours %= 24
+            days += 1
+        return f"{days}d {hours}h"
+    elif days == 0:
+        return f"{hours}h {minutes}m"
+    else:
+        return f"{days}d {hours}h {minutes}m"
 
 
 __plugin_name__ = "OctoPrint Wrapped!"

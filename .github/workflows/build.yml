@@ -44,6 +44,52 @@ jobs:
         run: |
           pre-commit run --all-files --show-diff-on-failure
 
+  test-unit:
+    name: 🧪 Unit tests
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 🏗 Set up Python ${{ matrix.python }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python }}
+      - name: 🏗 Set up test dependencies
+        run: |
+          pip install octoprint
+          pip install -e .[develop]
+      - name: 🚀 Run test suite
+        run: |
+          pytest | tee report.txt
+          pytest_exit=${PIPESTATUS[0]}
+
+          # generate summary
+          python=$(python -c 'import sys; print(".".join(map(str, sys.version_info[:3])))')
+          today=$(date +'%Y-%m-%d')
+          now=$(date +'%H:%M')
+          summary=$(tail -n1 report.txt | sed 's/^=*\s//g' | sed 's/\s=*$//g')
+
+          cat << EOF >> $GITHUB_STEP_SUMMARY
+          ### Test Report
+
+          *generated on $today at $now under Python $python*
+
+          <details>
+          <summary>$summary</summary>
+
+          \`\`\`
+          $(cat report.txt)
+          \`\`\`
+
+          </details>
+          EOF
+
+          # make sure we fail if pytest fails!
+          exit $pytest_exit
+
   test-install:
     name: 🧪 Installation test
     strategy:
@@ -92,6 +138,7 @@ jobs:
     needs:
       - build
       - pre-commit
+      - test-unit
       - test-install
       - test-e2e
     runs-on: ubuntu-latest
