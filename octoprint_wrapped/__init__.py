@@ -22,6 +22,9 @@ SECONDS_HOUR = SECONDS_MINUTE * 60
 SECONDS_DAY = SECONDS_HOUR * 24
 
 
+FONT_FILE_OPEN_SANS_BOLD = "open-sans-v15-latin-700.woff"
+
+
 class YearStats(BaseModel):
     year: int
     prints_completed: int
@@ -42,6 +45,13 @@ class WrappedPlugin(
     octoprint.plugin.SimpleApiPlugin,
     octoprint.plugin.TemplatePlugin,
 ):
+    def __init__(self):
+        super().__init__()
+        self.font_open_sans_bold: str = None
+
+    def initialize(self):
+        self._load_font()
+
     ##~~ AssetPlugin mixin
 
     def get_assets(self):
@@ -71,7 +81,11 @@ class WrappedPlugin(
             flask.abort(404)
 
         response = flask.make_response(
-            flask.render_template("wrapped.svg.jinja2", **stats.model_dump(by_alias=True))
+            flask.render_template(
+                "wrapped.svg.jinja2",
+                font_open_sans_bold=self.font_open_sans_bold,
+                **stats.model_dump(by_alias=True),
+            )
         )
         response.headers["Content-Type"] = "image/svg+xml"
         return response
@@ -241,6 +255,22 @@ class WrappedPlugin(
         seconds -= minutes * SECONDS_MINUTE
 
         return f"{hours}h {minutes}m"
+
+    def _load_font(self) -> None:
+        from base64 import b64encode
+
+        font_path = os.path.join(
+            os.path.dirname(__file__), "static", "fonts", FONT_FILE_OPEN_SANS_BOLD
+        )
+
+        try:
+            with open(font_path, "rb") as f:
+                data = f.read()
+
+            encoded = b64encode(data).decode().strip()
+            self.font_open_sans_bold = f"data:font/woff;base64,{encoded}"
+        except Exception:
+            self._logger.exception("Error creating data URI for embedded font")
 
 
 __plugin_name__ = "OctoPrint Wrapped!"

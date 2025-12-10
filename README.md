@@ -30,3 +30,6 @@ The plugin does not have any configuration options.
 
 The snowfall is implemented with a slightly customized version of [pure-snow.js](https://github.com/hyperstown/pure-snow.js),
 released under the MIT license and bundled here under `octoprint_wrapped/static/pure-snow`.
+
+The font used for the stats in the generated wrapped picture is [Open Sans](https://fonts.google.com/specimen/Open+Sans),
+released under the SIL Open Font License and bundled here under `octoprint_wrapped/static/fonts`.
