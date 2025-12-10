@@ -65,9 +65,6 @@ class WrappedPlugin(
     def is_blueprint_csrf_protected(self):
         return True
 
-    def is_protected(self):
-        return True
-
     @octoprint.plugin.BlueprintPlugin.route("/<int:year>.svg", methods=["GET"])
     def get_svg(self, year):
         if (
