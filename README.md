@@ -1,19 +1,21 @@
 # OctoPrint Wrapped! 🎁
 
-Get your yearly OctoPrint stats a shareable "wrapped" picture - and let it snow! ❄️
+Get your yearly OctoPrint stats as a shareable **#OctoPrintWrapped** picture - and let it snow!
 
 <img src="https://raw.githubusercontent.com/OctoPrint/OctoPrint-Wrapped/main/extras/wrapped-demo.png" width="400" height="400" alt="Demo OctoPrint Wrapped share picture" />
 
 ![Demo of snow effect](https://raw.githubusercontent.com/OctoPrint/OctoPrint-Wrapped/main/extras/snowfall-demo.gif)
 
-The stats picture depends on the Achievements plugin being enabled (as it takes care of
-the stats collection during the year) and can be opened via the little gift package icon
+The Wrapped picture depends on the Achievements plugin being enabled (as it takes care of
+the stats collection during the year) and can be opened via the little gift package icon 🎁
 in the navbar.
 
-The snow effect can always be toggled during the season using the little snowflake icon
+The snow effect can always be toggled during the season using the little snowflake icon ❄️
 in the navbar, and its setting persists through the browser's local storage.
 
-Both wrapped and snowfall are only available from December 1st until January 10th.
+Both Wrapped and snowfall are only available from December 1st until January 10th.
+
+**If you post your Wrapped on social media, make sure to use the hashtag `#OctoPrintWrapped`! 😊**
 
 ## Setup
 
