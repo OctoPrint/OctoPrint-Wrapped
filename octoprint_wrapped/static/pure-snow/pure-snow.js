@@ -88,6 +88,8 @@ function getRandomArbitrary(min, max) {
 
 // Create style for snowflake
 function generateSnowCSS(snowDensity = 200) {
+    document.getElementById("snow").style.height = `${pageHeightVh}vh`;
+
     let snowflakeName = "snowflake";
     let rule = baseCSS;
 
