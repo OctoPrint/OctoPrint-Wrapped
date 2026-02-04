@@ -47,7 +47,7 @@ $(function () {
                     : now.getFullYear() - 1; // already January
             const years = self.availableYears();
 
-            if (years.indexOf(year) !== -1 && self.withinWrappedSeason()) {
+            if (years.indexOf(year) !== -1) {
                 return year;
             } else {
                 return false;
@@ -62,7 +62,14 @@ $(function () {
             const year = self.currentWrapped();
             if (!year) return false;
 
-            return OctoPrint.plugins.wrapped.getYearSvgUrl(year);
+            return self.svgUrlForYear(year);
+        });
+
+        self.pastYears = ko.pureComputed(() => {
+            const now = new Date();
+            const year = now.getFullYear();
+            const years = self.availableYears();
+            return years.filter((y) => y < year).sort((a, b) => b - a);
         });
 
         self.withinWrappedSeason = ko.pureComputed(() => {
@@ -73,6 +80,10 @@ $(function () {
                 (now.getMonth() == MONTH_JANUARY && now.getDate() < 10)
             );
         });
+
+        self.svgUrlForYear = (year) => {
+            return OctoPrint.plugins.wrapped.getYearSvgUrl(year);
+        };
 
         self.requestData = () => {
             if (

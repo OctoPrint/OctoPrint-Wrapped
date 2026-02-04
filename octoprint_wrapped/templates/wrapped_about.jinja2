@@ -19,6 +19,23 @@
 </div>
 <p data-bind="visible: !withinWrappedSeason()">
     {% trans %}
-    Nothing to see here at the moment! Come back between December 1st and January 10th!
+    Nothing to see for this year yet! Come back between December 1st and January 10th!
 {% endtrans %}
 </p>
+
+<div id="plugin_wrapped_pastyears"
+     data-bind="visible: pastYears().length > 0">
+    <h4>
+        <a href="javascript:void()"
+           data-bind="toggleContent: { class: 'fa-caret-right fa-caret-down', parent: '#plugin_wrapped_pastyears', container: '.hide' }"><i class="fas fa-caret-right"></i> {{ _("Past years") }}</a>
+    </h4>
+
+    <div class="hide" data-bind="foreach: pastYears">
+        <h5 data-bind="text: $data"></h5>
+        <img data-bind="src.svgtopng: $root.svgUrlForYear($data)"
+             alt="OctoPrint Wrapped sharepic"
+             width="400"
+             height="400" />
+    </div>
+
+</div>
