@@ -79,7 +79,7 @@ class WrappedPlugin(
 
         response = flask.make_response(
             flask.render_template(
-                "wrapped.svg.jinja2",
+                "plugin_wrapped/wrapped.svg.jinja2",
                 font_open_sans_bold=self.font_open_sans_bold,
                 **stats.model_dump(by_alias=True),
             )
