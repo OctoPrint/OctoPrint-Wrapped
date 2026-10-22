@@ -121,7 +121,7 @@ jobs:
   test-e2e:
     name: 🧪 E2E tests
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04 # change back to ubuntu-latest once we drop Python 3.9 & upgrade playwright
     strategy:
       fail-fast: false
       matrix:
