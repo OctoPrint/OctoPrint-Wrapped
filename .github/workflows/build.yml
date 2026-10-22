@@ -56,7 +56,7 @@ jobs:
       fail-fast: false
       matrix:
         python: ["3.9", "3.10", "3.11", "3.12", "3.13"]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04 # change back to ubuntu-latest once we drop Python 3.9 & upgrade playwright
     steps:
       - uses: actions/checkout@v6
         with:
@@ -104,7 +104,7 @@ jobs:
       fail-fast: false
       matrix:
         python: ["3.9", "3.10", "3.11", "3.12", "3.13"]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04 # change back to ubuntu-latest once we drop Python 3.9 & upgrade playwright
     steps:
       - uses: actions/checkout@v6
         with:
